@@ -3,9 +3,9 @@
 //
 var SlidingWindow = require('./slidingwindow');
 
-function SlidingTimeWindow(topic, services, period){
+function SlidingTimeWindow(topic, period){
 	// base
-	SlidingWindow.call(this, topic, services);
+	SlidingWindow.call(this, topic);
 	this.period_ = period || 5000;	// 默认是5000毫秒
 
 	// init
@@ -45,18 +45,27 @@ SlidingTimeWindow.prototype.slidingTime_ = function(fields, period, timestamp) {
 		return;
 	
 	for(var key in fields){
-		if (!this.fields_[key]) 
-			this.fields_[key] = {};
-		this.fields_[key][timestamp_] = fields[key];
-	}
+		var theSeries = this.fields_[key];
+		if (!theSeries){
+			theSeries = [{
+				"t" : timestamp_,
+				"v" : fields[key]
+			}];
+			this.fields_[key] = theSeries;
+			continue;
+		}
 
-	times.push(timestamp_);
-	times.sort();
+		theSeries.push({
+			"t" : timestamp_,
+			"v" : fields[key]
+		});
 
-	while(times[0] && times[0] < start_){
-		var t1 = times.shift();
-		for (var key in this.fields_){
-			delete this.fields_[key][t1];
+		theSeries.sort(function (a, b){ // positive sort by timestamp
+			return a.t - b.t;
+		});
+
+		while(theSeries[0] && theSeries[0].t < start_){
+			theSeries.shift();
 		}
 	}
 };

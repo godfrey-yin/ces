@@ -3,9 +3,9 @@
 //
 var SlidingWindow = require('./slidingwindow');
 
-function SlidingCountWindow(topic, services, count){
+function SlidingCountWindow(topic, count){
 	// base
-	SlidingWindow.call(this, topic, services);
+	SlidingWindow.call(this, topic);
 	this.count_ = count || 3;	// 默认是3个值
 
 	// init
@@ -32,16 +32,31 @@ SlidingCountWindow.prototype.slide = function(topic, fields, timestamp) {
 // 滑动计数器窗口
 //
 SlidingCountWindow.prototype.slidingCount_ = function(fields, count, timestamp) {
+	var self = this;
 	var timestamp_ = isNaN(timestamp) ? Date.now() : timestamp;
 
 	for(var key in fields){
-		if (!this.fields_[key]) 
-			this.fields_[key] = {};
-		this.fields_[key][timestamp_] = fields[key];
+		var theSeries = this.fields_[key];
+		if (!theSeries){
+			theSeries = [{
+				"t" : timestamp_,
+				"v" : fields[key]
+			}];
+			this.fields_[key] = theSeries;
+			continue;
+		}
 
-		var times_of_key = Object.keys(this.fields_[key]).sort();
-		if (times_of_key.length > count){
-			delete this.fields_[key][times_of_key.shift()];
+		theSeries.push({
+			"t" : timestamp_,
+			"v" : fields[key]
+		});
+
+		theSeries.sort(function (a, b){ // positive sort by timestamp
+			return a.t - b.t;
+		});
+
+		if (theSeries.length > self.count_){
+			theSeries.shift();
 		}
 	}
 };

@@ -2,8 +2,8 @@ module.exports = {
 	"demo" : {
 		"handler" : "Demo/ExampleHandler"
 	},
-	"demo.bench" : {
-		"handler" : "Demo/BenchHandler"
+	"showme" : {
+		"handler" : "Demo/ShowMeHandler"
 	},
 	"demo.seq.bench" : {
 		"handler" : "Demo/ForSequenceTestHandler"

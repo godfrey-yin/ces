@@ -6,7 +6,7 @@ var EventEmitter = require('events').EventEmitter
 	, recv_time = "recv"
 	, source_time = "source";
 
-function SlidingWindow(topic, services){
+function SlidingWindow(topic){
 	EventEmitter.call(this);
 
 	//
@@ -19,8 +19,20 @@ function SlidingWindow(topic, services){
 	//
 	this.ready_ = false;
 	this.topic_ = topic;
-	this.services_ = services;
 
+	//
+	// key - string
+	// value - array
+	/*
+		[
+			{
+				"t" : timestamp, number
+				"v" : object
+			},
+			... 
+		]
+	*/ 
+	//
 	this.fields_ = {};
 
 }
@@ -43,39 +55,12 @@ SlidingWindow.prototype.slide = function(topic, fields, timestamp){
 };
 
 SlidingWindow.prototype.getSeries = function(key){
-	if ( !arguments.length){
-		var ret = {};
-		for(var key in this.fields_){
-			if (key)
-				ret[key] = this.getSeries(key);
-		}
-		return ret;
+	var key = arguments[0];
+	if (key){
+		return this.fields_[key];
 	}
-
-	var fields = this.fields_
-		, times = [];
-
-	// NOTE：
-	// javascript会自动将作为time key的number转换为string，这里需要重新转换成number
-	if (fields[key]) {
-		Object.keys(fields[key]).forEach(function(time){
-			times.push(parseInt(time));
-		});
-	}
-
-	// sort times
-	times.sort();
-
-	return {
-		"times" : times,
-		"series" : fields[key] ? 
-			(function(){
-				var ret = [];
-				times.forEach(function(timestamp){
-					ret.push(fields[key][timestamp]);
-				});
-				return ret;
-			})() : []
+	else{
+		return this.fields_;
 	}
 };
 
