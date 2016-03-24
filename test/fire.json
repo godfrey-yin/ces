@@ -1,0 +1,6 @@
+{
+	"addr":"localhost",
+	"auth_pass":null,
+	"port":6379,
+	"channel" : "channel_1"
+}

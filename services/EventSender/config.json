@@ -1,0 +1,16 @@
+{
+	"name":"EventSender",
+	"enable":true,
+	"stream_server":[
+		{
+			"addr":"localhost",
+			"auth_pass":null,
+			"port":6379			
+		}
+	],
+	"channels" : [
+		"channel_1"
+	],
+	"max_len":100,
+	"max_time_to_fire":10
+}

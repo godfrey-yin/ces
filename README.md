@@ -1,2 +1,2 @@
 # ces
-Simple Calc Engine System
+Simple Calc Engine System, Support Cluster and Singlton mode.

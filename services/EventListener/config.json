@@ -1,0 +1,14 @@
+{
+	"name":"EventListener",
+	"enable":true,
+	"stream_server":[
+		{
+			"addr":"localhost",
+			"auth_pass":null,
+			"port":6379			
+		}
+	],
+	"channels" : [
+		"channel_1"
+	]
+}
