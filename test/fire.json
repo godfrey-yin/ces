@@ -2,5 +2,6 @@
 	"addr":"localhost",
 	"auth_pass":null,
 	"port":6379,
-	"channel" : "channel_1"
+	"channel" : "sub_channel",
+	"output" : "pub_channel"
 }

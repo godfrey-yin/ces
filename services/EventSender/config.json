@@ -9,7 +9,7 @@
 		}
 	],
 	"channels" : [
-		"channel_1"
+		"pub_channel"
 	],
 	"max_len":100,
 	"max_time_to_fire":10

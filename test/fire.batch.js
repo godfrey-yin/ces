@@ -5,6 +5,15 @@ var Stream = require('../client').Stream;
 var redisClient = redis.createClient(config.port, config.addr, config.auth_pass);
 var stream = new Stream(redisClient, config.channel);
 
+var outClient = redis.createClient(config.port, config.addr, config.auth_pass);
+var output = new Stream(outClient, config.output);
+output.listenEvents(function (ev){
+	console.log("---------------------------------");
+	console.log("Received output event.");
+	console.dir(ev);
+	console.log("---------------------------------");
+});
+
 var count = 10;
 var tagcount = 10;
 var topics = [];
